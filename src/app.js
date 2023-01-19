@@ -19,8 +19,8 @@ async function app(yargsInput) {
       console.log("Created Movie");
 
     } else if (yargsInput.read) {
-      //place code to list all our movies here,        add info if going to use
-      const results = await sequelize.query("SELECT title, director, addedby, name FROM Movies JOIN ActorMovies ON Movies.id=ActorMovies.MovieId JOIN Actors ON Actors.id=ActorMovies.ActorId;"); 
+      //place code to list all our movies here
+      const results = await sequelize.query("SELECT title, name, director, addedby FROM Movies JOIN ActorMovies ON Movies.id=ActorMovies.MovieId JOIN Actors ON Actors.id=ActorMovies.ActorId;"); 
       // console.log(results);
         for (let index = 0; index < results.length; index++) {
           const element = results[0][index];
