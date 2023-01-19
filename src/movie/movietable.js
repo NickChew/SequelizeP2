@@ -20,10 +20,10 @@ const Movie = sequelize.define("Movie", {
     addedBy: {
         type: DataTypes.STRING,
         allowNull: true,
-        subQuery: false,
-        distinct: true,
+        // subQuery: false,
+        // distinct: true,
         defaultValue: "Not known",
-        unique: "addedBy"
+        unique: "true"
     }
 });
 
