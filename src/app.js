@@ -6,38 +6,39 @@ const Actor = require("./movie/actortable");
 const ActorMovie = require("./movie/actormovietable");
 
 async function app(yargsInput) {
-    await sequelize.sync();
+    await sequelize.sync({alter:true});
     if (yargsInput.create) {
       //place code to create a movie here
       console.log("Entering create"); 
       await createMovie({
         title: yargsInput.title,
-        // actor: yargsInput.actor,
+        actor: yargsInput.actor,
         director: yargsInput.director,
-        addedBy: yargsInput.addedby
+        addedby: yargsInput.addedby
       });
       console.log("Created Movie");
 
     } else if (yargsInput.read) {
-      //place code to list all our movies here
-      const results = await Movie.findAll({}); 
+      //place code to list all our movies here,        add info if going to use
+      const results = await sequelize.query("SELECT title, director, addedby, name FROM Movies JOIN ActorMovies ON Movies.id=ActorMovies.MovieId JOIN Actors ON Actors.id=ActorMovies.ActorId;"); 
+      // console.log(results);
         for (let index = 0; index < results.length; index++) {
-          const element = results[index];
-          console.log(`${element.title} Staring ${element.actor} Directed by ${element.director} Added By ${element.addedby}`);
+          const element = results[0][index];
+          console.log(`${element.title} Staring ${element.name} Directed by ${element.director} Added By ${element.addedby}`);
         }
 
-    // } else if (yargsInput.updateActor) {
-    //   //place code to update actor field here
-    //   // use findOne() to find title want updated then Set() method to change value of actor, then call the save() method.
-    //   // look at update/upsert 
-    //   const newActor = await Movie.findOne({ where: { title : yargsInput.title } });
-    //     if (newActor) {
-    //       newActor.actor= yargsInput.actor
-    //       await newActor.save();
-    //       console.log ("Updated Movie Actor Successfully");
-    //     } else {
-    //       console.log("Movie not found");
-    //     }
+    } else if (yargsInput.updateActor) {
+      //place code to update actor field here
+      // use findOne() to find title want updated then Set() method to change value of actor, then call the save() method.
+      // look at update/upsert 
+      const newActor = await Movie.findOne({ where: { title : yargsInput.title } });
+        if (newActor) {
+          newActor.actor= yargsInput.actor
+          await newActor.save();
+          console.log ("Updated Movie Actor Successfully");
+        } else {
+          console.log("Movie not found");
+        }
 
     } else if (yargsInput.updateAddedBy) {
       //place code to update who added movie goes here
