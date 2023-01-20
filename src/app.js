@@ -22,7 +22,7 @@ async function app(yargsInput) {
       //place code to list all our movies here
       const results = await sequelize.query("SELECT title, name, director, addedby FROM Movies JOIN ActorMovies ON Movies.id=ActorMovies.MovieId JOIN Actors ON Actors.id=ActorMovies.ActorId;"); 
       // console.log(results);
-        for (let index = 0; index < results.length; index++) {
+        for (let index = 0; index < results[0].length; index++) {
           const element = results[0][index];
           console.log(`${element.title} Staring ${element.name} Directed by ${element.director} Added By ${element.addedby}`);
         }
