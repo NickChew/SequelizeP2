@@ -30,7 +30,12 @@ async function app(yargsInput) {
     } else if (yargsInput.updateActor) {
       //place code to update actor field here
       // use findOne() to find title want updated then Set() method to change value of actor, then call the save() method.
-      // look at update/upsert 
+      // /Check if the actor already exists (findOne)
+      //If the actor does not exist add them to the actor table
+      //Delete(destroy) the existing relationship in the ActorMovie table
+      //Get the Movie Id from the Movie table
+      //Get the actor id from the actor table
+      //create a new entry in the actormovie table with above
       const mymovieid = await Movie.findOne({ where: { title : yargsInput.title } });
       await ActorMovie.destroy ({where:{MovieId:mymovieid.id}});
       const checkForActor = await Actor.findOne({where:{name:yargsInput.actor}});
