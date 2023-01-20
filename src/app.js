@@ -6,7 +6,7 @@ const Actor = require("./movie/actortable");
 const ActorMovie = require("./movie/actormovietable");
 
 async function app(yargsInput) {
-    await sequelize.sync({alter:true});
+    await sequelize.sync({});
     if (yargsInput.create) {
       //place code to create a movie here
       console.log("Entering create"); 
@@ -31,20 +31,22 @@ async function app(yargsInput) {
       //place code to update actor field here
       // use findOne() to find title want updated then Set() method to change value of actor, then call the save() method.
       // look at update/upsert 
-      const newActor = await Movie.findOne({ where: { title : yargsInput.title } });
-        if (newActor) {
-          newActor.actor= yargsInput.actor
-          await newActor.save();
-          console.log ("Updated Movie Actor Successfully");
-        } else {
-          console.log("Movie not found");
-        }
+      const mymovieid = await Movie.findOne({ where: { title : yargsInput.title } });
+      await ActorMovie.destroy ({where:{MovieId:mymovieid.id}});
+      const checkForActor = await Actor.findOne({where:{name:yargsInput.actor}});
+      let newActor = {};  // because of scope
+      if (checkForActor == null){
+          console.log("Entering Actor Add");
+          newActor = await Actor.create({name: yargsInput.actor, info: yargsInput.info});
+      }
+      const myactorid = await Actor.findOne({where:{name:yargsInput.actor}});
+      await ActorMovie.create ({MovieId:mymovieid.id, ActorId:myactorid.id});
 
     } else if (yargsInput.updateAddedBy) {
       //place code to update who added movie goes here
       const newaddedby = await Movie.findOne({ where: { title : yargsInput.title } });
         if (newaddedby) {
-          newaddedby.addedBy= yargsInput.addedBy
+          newaddedby.addedby= yargsInput.addedby
           await newaddedby.save();
           console.log ("Updated who added Movie Successfully");
         } else {

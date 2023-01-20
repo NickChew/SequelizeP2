@@ -13,12 +13,15 @@ exports.createMovie = async (movieObj) => {
         } else {
             newMovie = await Movie.findOne({where:{title:movieObj.title}});
         }
-
+        console.log("testtxt")
         const checkForActor = await Actor.findOne({where:{name:movieObj.actor}});
+        console.log("testtxt2")
         let newActor = {};  // because of scope
         if (checkForActor == null){
             console.log("Entering Actor Add");
             newActor = await Actor.create({name: movieObj.actor, info: movieObj.info});
+        }else {
+            newActor = await Actor.findOne({where:{name:movieObj.actor}});
         }
 
         if (newActor != {} || newMovie !={}){

@@ -10,6 +10,7 @@ const Movie = sequelize.define("Movie", {
     director: {
         type: DataTypes.STRING,
         defaultValue: "Not known",
+        allowNull: true,
         unique: true
     },
     addedby: {
